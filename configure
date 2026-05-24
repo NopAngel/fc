@@ -1,0 +1,25 @@
+#!/bin/bash
+# FC - Fucking Calculator Configuration Script
+
+echo "Checking for dependencies..."
+
+# Check for readline
+echo -n "Checking for libreadline... "
+if ldconfig -p | grep -q libreadline; then
+    echo "found"
+else
+    echo "NOT FOUND (Install libreadline-dev)"
+    exit 1
+fi
+
+# Check for ncurses
+echo -n "Checking for ncurses... "
+if ldconfig -p | grep -q ncurses; then
+    echo "found"
+else
+    echo "NOT FOUND (Install libncurses-dev)"
+    exit 1
+fi
+
+cp Makefile.in Makefile
+echo "Configuration complete. Type 'make' to build."
