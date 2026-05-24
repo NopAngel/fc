@@ -1,0 +1,6 @@
+Checks: '-*,clang-diagnostic-*,llvm-*,misc-*,readability-*,bugprone-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: 'include/.*'
+CheckOptions:
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
