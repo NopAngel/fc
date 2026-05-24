@@ -29,7 +29,13 @@ typedef struct { char name[32]; double value; } Variable;
 Variable vars[200];
 int var_count = 0;
 
-typedef struct { char name[32]; char body[256]; char arg_name[32]; } Function;
+typedef struct {
+    char name[32]; 
+    char body[256]; 
+    char arg_name[32];
+} Function;
+
+
 Function funcs[100];
 int func_count = 0;
 
@@ -151,14 +157,28 @@ execute_line
         return;
     }
 
-    // DO loop: do(var, limit) action
     if (strncmp(ptr, "do", 2) == 0) {
         ptr += 2; skip_spaces();
         if (*ptr == '(') {
-            ptr++; char vname[32]; int i=0; while(isalnum(*ptr)) vname[i++] = *ptr++; vname[i]='\0';
-            if (*ptr == ',') ptr++; double limit = expression(); if (*ptr == ')') ptr++;
-            skip_spaces(); char action[256]; strcpy(action, ptr);
-            for (double j = 1; j <= limit; j++) { set_var(vname, j); execute_line(action); }
+            ptr++; 
+            char vname[32]; int i=0; 
+            while(isalnum(*ptr)) vname[i++] = *ptr++; 
+            vname[i]='\0';
+
+            if (*ptr == ',') ptr++; 
+            
+            double limit = expression();
+            
+            if (*ptr == ')') ptr++;
+            
+            skip_spaces(); 
+            char action[256]; 
+            strcpy(action, ptr);
+            
+            for (double j = 1; j <= limit; j++) { 
+                set_var(vname, j); 
+                execute_line(action); 
+            }
         }
         return;
     }
