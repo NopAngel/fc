@@ -1,0 +1,10 @@
+#!/bin/bash
+# Build Rig for fast testing
+mkdir -p out
+gcc src/main.c src/version.c -o out/fc -Iinclude -lm -lreadline -Wall
+if [ $? -eq 0 ]; then
+    echo "Rig: Build successful."
+    ./out/fc
+else
+    echo "Rig: Build failed."
+fi
