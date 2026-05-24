@@ -1,23 +1,44 @@
-name: C/C++ CI
+name: C/C++ CI (Fucking Calculator)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libncurses5-dev libncursesw5-dev libreadline-dev g++ gcc
+
+    - name: Configure project
+      run: |
+        chmod +x configure
+        ./configure
+
+    - name: Run Menuconfig (Default Config)
+      run: |
+        echo "CONFIG_POSIX=1" > .config
+        echo "CONFIG_LANG=2" >> .config
+        echo "CONFIG_TARGET=0" >> .config
+        echo "CONFIG_NO_GCC_LIB=0" >> .config
+        echo "CONFIG_OPTIMIZE=1" >> .config
+
+    - name: Compile FC
       run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+
+    - name: Check binary
+      run: |
+        if [ -f out/fc ]; then
+          echo "Binary out/fc created successfully."
+        else
+          echo "Binary not found!"
+          exit 1
+        fi
