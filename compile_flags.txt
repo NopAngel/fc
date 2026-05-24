@@ -1,0 +1,6 @@
+-Iinclude
+-Wall
+-Wextra
+-std=c11
+-DCONFIG_LANG=0
+-DCONFIG_POSIX=0
