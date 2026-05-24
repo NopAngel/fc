@@ -1,0 +1,41 @@
+CC      = gcc
+CXX     = g++
+Q       = @
+TARGET  = out/fc
+TARGET_D = out/menuconfig
+SOURCE  = src/version.c src/main.c
+-include .config
+
+ifndef CONFIG_LANG
+    MISSING_CONFIG = 1
+endif
+
+# Flags base
+CFLAGS = -Wall -Wextra -Iinclude -lm -lreadline
+
+all:
+ifdef MISSING_CONFIG
+	$(Q)echo "-------------------------------------------------------"
+	$(Q)echo "  [!] WARNING: .config file not found."
+	$(Q)echo "  It is highly recommended to run 'make menuconfig' first"
+	$(Q)echo "  to avoid compilation errors and set your language."
+	$(Q)echo "-------------------------------------------------------"
+	$(Q)sleep 2
+	$(Q)$(MAKE) menuconfig
+else
+	$(Q)mkdir -p out
+	$(Q)$(CC) $(SOURCE) -o $(TARGET) $(CFLAGS) \
+		-DCONFIG_POSIX=$(CONFIG_POSIX) \
+		-DCONFIG_LANG=$(CONFIG_LANG) \
+		-DCONFIG_TARGET=$(CONFIG_TARGET)
+	$(Q)./$(TARGET)
+endif
+
+menuconfig:
+	$(Q)mkdir -p out
+	$(Q)$(CXX) scripts/menuconfig.cpp -o $(TARGET_D) -lncurses -Wextra
+	$(Q)./$(TARGET_D)
+
+clean:
+	$(Q)rm -rf out/
+	$(Q)rm -f .config
